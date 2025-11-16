@@ -1,7 +1,7 @@
-# DreamStream Airdrop Monitor — Neon Terminal (Full Upgrade)
+# DreamStream Airdrop Monitor — Neon Terminal 
 
 This upgraded demo is tailored for the Somnia Data Streams Hackathon.
-Style: Terminal + Neon (Style D).
+
 
 ## Features
 - Mocked real-time points & mission simulator (no backend required)
