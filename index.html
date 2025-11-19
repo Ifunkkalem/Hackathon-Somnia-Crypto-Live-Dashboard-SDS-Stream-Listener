@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DreamStream PRO+ — Neo-Terminal</title>
 
-  <!-- FIXED PATH -->
   <link rel="stylesheet" href="style.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
 </head>
 
 <body>
@@ -29,7 +28,9 @@
     <section class="left-col">
       <div class="card stats">
         <div class="stat"><div class="label">Points</div><div id="points" class="value">0</div></div>
+        
         <div class="stat"><div class="label">Missions</div><div id="missions-count" class="value">0</div></div>
+        
         <div class="stat"><div class="label">Stream</div><div id="stream-status" class="value off">Disconnected</div></div>
       </div>
 
@@ -47,7 +48,7 @@
     <aside class="right-col">
       <div class="card pairs-card">
         <h4>Live Pairs</h4>
-        <div id="pairs" class="pairs-grid"></div>
+        <div id="pairs" class="pairs-grid"></div> 
       </div>
 
       <div class="card missions-card">
@@ -70,9 +71,7 @@
 
   <footer class="footer">Hilldanime Labs • DreamStream PRO+ • Somnia Hackathon</footer>
 
-  <!-- FIXED PATH -->
-  <<link rel="stylesheet" href="style.css">
-<script src="stream_adapter.js"></script>
-<script src="app.js"></script>
+  <script src="stream_adapter.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
