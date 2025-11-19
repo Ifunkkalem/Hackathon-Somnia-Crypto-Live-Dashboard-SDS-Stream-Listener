@@ -3,72 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamStream Airdrop Monitor — Neon Terminal (Upgraded)</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>DreamStream PRO+ — Neo-Terminal</title>
+  <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 </head>
 <body>
-  <div class="wrap">
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">
-      <img src="Ds.png" alt="DreamStream Logo" class="h-8 w-8 object-contain" />
+  <nav class="nav">
+    <div class="brand">
+      <div class="logo">DS</div><span>DreamStream PRO+</span>
     </div>
-    <div class="titles">
-      <h1>DreamStream Airdrop Monitor</h1>
-      <p class="subtitle">Terminal · Neon — Somnia Hackathon</p>
+    <div class="nav-right">
+      <input id="wallet-input" placeholder="Wallet 0x..." />
+      <button id="btn-connect">Track Wallet</button>
+      <button id="btn-metamask">Connect MetaMask</button>
+      <label class="toggle"><input type="checkbox" id="toggle-sim" checked /> Mock</label>
     </div>
-  </div>
-  <div class="controls">
-    <input id="wallet-input" placeholder="Enter wallet (0x...)" />
-    <button id="btn-connect">Track</button>
-  </div>
-</header>
+  </nav>
 
-    <main class="main">
-      <section class="left">
-        <div class="panel">
-          <h3>Live Points</h3>
-          <div class="points-row">
-            <div id="points" class="big">0</div>
-            <div id="points-change" class="delta">+0</div>
-          </div>
-          <canvas id="pointsChart" height="120"></canvas>
-        </div>
+  <main class="grid">
+    <section class="left-col">
+      <div class="card stats">
+        <div class="stat"><div class="label">Points</div><div id="points" class="value">0</div></div>
+        <div class="stat"><div class="label">Missions</div><div id="missions-count" class="value">0</div></div>
+        <div class="stat"><div class="label">Stream</div><div id="stream-status" class="value off">Disconnected</div></div>
+      </div>
 
-        <div class="panel small">
-          <h4>Recent Activity</h4>
-          <div id="activity" class="log muted">No events</div>
-        </div>
-      </section>
+      <div class="card chart-card">
+        <h3>Points History</h3>
+        <canvas id="pointsChart"></canvas>
+      </div>
 
-      <aside class="right">
-        <div class="panel">
-          <h4>Active Missions</h4>
-          <ul id="missions" class="mission-list">
-            <li class="muted">No wallet tracked</li>
-          </ul>
-        </div>
+      <div class="card activity-card">
+        <h3>Recent Activity</h3>
+        <div id="activity" class="log">No events</div>
+      </div>
+    </section>
 
-        <div class="panel status">
-          <h4>Stream Status</h4>
-          <div id="stream-status" class="st off">Disconnected</div>
-          <label class="line"><input type="checkbox" id="toggle-sim" checked> Use mock simulator</label>
-        </div>
+    <aside class="right-col">
+      <div class="card pairs-card">
+        <h4>Live Pairs</h4>
+        <div id="pairs" class="pairs-grid"></div>
+      </div>
 
-        <div class="panel">
-          <h4>Top Pairs (Live)</h4>
-          <div id="pairs" class="pairs-grid"></div>
-        </div>
-      </aside>
-    </main>
+      <div class="card missions-card">
+        <h4>Active Missions</h4>
+        <ul id="missions" class="mission-list">
+          <li class="muted">No wallet tracked</li>
+        </ul>
+      </div>
 
-    <footer class="footer">
-      <small>Hilldanime Labs — DreamStream · Somnia Hackathon</small>
-    </footer>
-  </div>
+      <div class="card controls-card">
+        <h4>Controls</h4>
+        <button id="btn-clear">Clear Activity</button>
+        <button id="btn-export">Export Log</button>
+        <div class="note">Mock Somnia stream & Binance WS. Integrate Somnia SDK di adapter.</div>
+      </div>
+    </aside>
+  </main>
 
-  <script src="stream_adapter.js"></script>
-  <script src="app.js"></script>
+  <div id="toast" class="toast"></div>
+
+  <footer class="footer">Hilldanime Labs • DreamStream PRO+ • Somnia Hackathon</footer>
+
+  <script src="js/stream_adapter.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
