@@ -1,83 +1,96 @@
-// stream_adapter.js (upgraded)
-// Mock simulator by default. Also supports Binance websockets for live pair prices.
-// Replace mock with Somnia Data Streams SDK as needed.
+// PRO+ stream_adapter.js
+// - Mock simulator (default)
+// - Binance public websockets for live pair prices
+// - Placeholder untuk Somnia Data Streams SDK
 
-(function(global){
-  const MOCK = true;
-  let sim = null;
-  let currentWallet='';
-  let wsPairs = {};
-  let listeners = {};
+(function(global) {
+  const DEFAULT_PAIRS = ["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT","DOGEUSDT","ADAUSDT","AVAXUSDT","TONUSDT","LINKUSDT"];
+  let simInterval = null;
+  let currentWallet = '';
+  let wsMap = {};
 
-  function startMock(wallet){
+  function startMock(wallet) {
+    stopMock();
+    currentWallet = wallet;
     let points = 0;
     const missions = [
       {id:1,name:"Join Somnia Discord",progress:0,target:1},
       {id:2,name:"Mint Demo NFT",progress:0,target:1},
       {id:3,name:"Share Tweet",progress:0,target:1}
     ];
-    sim = setInterval(()=>{
-      if(Math.random()<0.65){
-        const delta = Math.floor(Math.random()*60)+5;
+    simInterval = setInterval(() => {
+      if (Math.random() < 0.7) {
+        const delta = Math.floor(Math.random()*120) + 5;
         points += delta;
-        if(typeof global.onPointsUpdate === 'function') global.onPointsUpdate(wallet, points);
+        if (typeof global.onPointsUpdate === 'function') global.onPointsUpdate(wallet, points);
         log('Points +'+delta);
       } else {
-        const idx = Math.floor(Math.random()*missions.length);
+        const idx = Math.floor(Math.random() * missions.length);
         missions[idx].progress = missions[idx].target;
-        if(typeof global.onMissionUpdate === 'function') global.onMissionUpdate(wallet, missions[idx]);
-        log('Mission complete: '+missions[idx].name);
+        if (typeof global.onMissionUpdate === 'function') global.onMissionUpdate(wallet, missions[idx]);
+        log('Mission completed: '+missions[idx].name);
       }
-    },1400);
-    if(typeof global.onStreamStatus === 'function') global.onStreamStatus('connected (mock)');
+    }, 1000);
+    if (typeof global.onStreamStatus === 'function') global.onStreamStatus('connected (mock)');
   }
 
-  function stopMock(){
-    if(sim) clearInterval(sim);
-    if(typeof global.onStreamStatus === 'function') global.onStreamStatus('disconnected');
+  function stopMock() {
+    if (simInterval) clearInterval(simInterval);
+    if (typeof global.onStreamStatus === 'function') global.onStreamStatus('disconnected');
   }
 
-  function log(t){ if(typeof global.onStreamLog==='function') global.onStreamLog(t); }
-
-  function startPairWS(pairs){
-    stopPairWS();
-    pairs.forEach(sym=>{
-      const stream = sym.toLowerCase()+'@trade';
-      const url = 'wss://stream.binance.com:9443/ws/'+stream;
-      try{
+  function startPairsWS(pairs, listeners) {
+    stopPairsWS();
+    pairs.forEach(sym => {
+      try {
+        const stream = sym.toLowerCase() + '@trade';
+        const url = 'wss://stream.binance.com:9443/ws/' + stream;
         const ws = new WebSocket(url);
-        ws.onmessage = function(e){
+        ws.onopen = () => log('WS open ' + sym);
+        ws.onmessage = (e) => {
           const d = JSON.parse(e.data);
-          if(typeof listeners[sym] === 'function') listeners[sym](d);
+          if (listeners && typeof listeners[sym] === 'function') listeners[sym](d);
         };
-        ws.onopen = ()=> log('WS open '+sym);
-        ws.onerror = ()=> log('WS err '+sym);
-        ws.onclose = ()=> log('WS close '+sym);
-        wsPairs[sym]=ws;
-      }catch(err){ log('WS init fail '+sym); }
+        ws.onclose = () => log('WS close ' + sym);
+        ws.onerror = () => log('WS err ' + sym);
+        wsMap[sym] = ws;
+      } catch(e) {
+        log('WS init failed ' + sym);
+      }
     });
   }
 
-  function stopPairWS(){ Object.values(wsPairs).forEach(w=>{ try{w.close()}catch(e){} }); wsPairs={}; }
-
-  function trackPairs(pairs, listenerMap){
-    listeners = listenerMap || {};
-    startPairWS(pairs || []);
+  function stopPairsWS() {
+    Object.values(wsMap).forEach(w => {
+      try { w.close(); } catch {}
+    });
+    wsMap = {};
   }
 
-  function trackWallet(wallet, useMock=true){
+  function trackWallet(wallet, useMock = true) {
     currentWallet = wallet;
-    if(!wallet) return;
-    if(MOCK || useMock){
-      stopMock();
+    if (!wallet) return;
+    if (useMock) {
       startMock(wallet);
       return;
     }
-    log('Somnia SDK placeholder - implement subscription here.');
-    if(typeof global.onStreamStatus === 'function') global.onStreamStatus('sdk placeholder');
+    // Somnia SDK Integration placeholder:
+    // const client = new Somnia({ apiKey: 'YOUR_API_KEY' });
+    // client.subscribeToWallet(wallet, (evt) => {
+    //   onPointsUpdate(evt.wallet, evt.points || 0);
+    //   if (evt.mission) onMissionUpdate(evt.wallet, evt.mission);
+    // });
+    log('Somnia SDK not integrated');
   }
 
-  function stopTracking(){ stopMock(); stopPairWS(); }
+  function log(m) {
+    if (typeof global.onStreamLog === 'function') global.onStreamLog(m);
+  }
 
-  global.StreamAdapter = { trackWallet, stopTracking, trackPairs, isMock: ()=> MOCK };
+  global.ProStream = {
+    trackWallet,
+    stopTracking: () => { stopMock(); stopPairsWS(); },
+    startPairsWS,
+    DEFAULT_PAIRS
+  };
 })(window);
