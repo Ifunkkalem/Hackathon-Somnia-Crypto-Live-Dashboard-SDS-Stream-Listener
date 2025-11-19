@@ -5,22 +5,19 @@ class SDSStreamAdapter {
         this.onEvent = onEvent;
         this.onError = onError;
         this.connected = false;
-        this.interval = null; // simulasi stream untuk GitHub Pages
-        this.currentPoints = 0; // <-- BARU: Simpan status poin di class
+        this.interval = null;
+        this.currentPoints = 0; 
     }
 
     connect() {
         try {
             this.connected = true;
 
-            // 1. Kirim poin awal sebelum memulai interval agar dashboard langsung terisi
+            // Kirim poin awal sebelum memulai interval
             if (this.onPoints) {
-                // onPointsUpdate di app.js menerima (wallet, points)
                 this.onPoints(this.wallet, this.currentPoints); 
             }
 
-            // GitHub Pages TIDAK bisa menerima WebSocket external
-            // Maka kita gunakan simulasi stream berbasis timer
             this._startMockStream();
 
             if (this.onEvent) {
@@ -41,9 +38,9 @@ class SDSStreamAdapter {
         this.interval = setInterval(() => {
             if (!this.connected) return;
 
-            // simulasi poin
+            // Simulasi penambahan poin acak
             const addedPoints = Math.floor(Math.random() * 8) + 1;
-            this.currentPoints += addedPoints; // <-- Update properti class
+            this.currentPoints += addedPoints; 
 
             if (this.onPoints) {
                 this.onPoints(this.wallet, this.currentPoints); 
@@ -55,7 +52,7 @@ class SDSStreamAdapter {
                 );
             }
             
-            // Tambahkan simulasi misi sesekali (10% peluang per tick)
+            // Simulasi misi selesai dengan peluang kecil
             if (Math.random() < 0.1) {
                 if (window.onMissionUpdate) {
                     window.onMissionUpdate(this.wallet, { name: `Random Mission #${Math.floor(Math.random() * 100)}` });
