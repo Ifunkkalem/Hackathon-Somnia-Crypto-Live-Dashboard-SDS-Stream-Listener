@@ -1,8 +1,99 @@
-/* Ganti/Tambahkan Kode untuk Layout Grid dan Game Frame di bagian Main Content */
+/* style.css - FINAL VERSION */
 
+/* --- Variabel Warna Neon --- */
+:root {
+    --color-background: #0b0f19;
+    --color-card-background: #1a1f2e;
+    --color-neon-primary: #59ffc9; /* Hijau/Cyan Neon */
+    --color-neon-secondary: #ff5983; /* Merah Muda Neon */
+    --color-text-primary: #f0f8ff; /* Putih Muda */
+    --color-text-muted: #80A0A0;
+    --color-up: #59ffc9;
+    --color-down: #ff5983;
+}
+
+/* --- Gaya Global dan Font --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+}
+
+h1, h3 {
+    font-weight: 700;
+}
+
+/* --- Header --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    border-bottom: 2px solid var(--color-neon-primary);
+    box-shadow: 0 0 15px rgba(89, 255, 201, 0.3);
+}
+
+.header-left {
+    display: flex;
+    align-items: center; 
+    gap: 15px; 
+}
+
+.logo {
+    height: 40px; 
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); 
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+input[type="text"] {
+    background-color: var(--color-card-background);
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-neon-primary);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: var(--color-neon-primary);
+    color: var(--color-background);
+    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+}
+
+.btn-secondary {
+    background-color: var(--color-card-background);
+    color: var(--color-neon-secondary);
+    border: 1px solid var(--color-neon-secondary);
+    box-shadow: 0 0 5px rgba(255, 89, 131, 0.3);
+}
+
+/* --- Main Content Grid Layout --- */
 .main-content {
     display: grid;
-    /* Membuat layout 3 kolom, tetapi kolom game-frame akan mengambil seluruh lebar di baris bawah */
+    /* Layout: 2 kolom (2/3 lebar dan 1/3 lebar) */
     grid-template-columns: 2fr 1fr; 
     grid-gap: 20px;
     padding: 20px;
@@ -10,22 +101,141 @@
     margin: 0 auto;
 }
 
-.column.left {
-    grid-column: 1 / 2;
+.column {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.column.left {
+    grid-column: 1 / 2;
 }
 
 .column.right {
     grid-column: 2 / 3;
+}
+
+
+/* --- Kartu (Card) Styling --- */
+.card {
+    background-color: var(--color-card-background);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(89, 255, 201, 0.2);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Metrics Row --- */
+.metrics-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 15px;
+    align-items: center;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric h3 {
+    color: var(--color-neon-primary);
+}
+
+.metric .value {
+    font-size: 3em;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 0 10px var(--color-neon-primary);
+}
+
+.metric .value.off {
+    color: var(--color-neon-secondary);
+    text-shadow: 0 0 10px var(--color-neon-secondary);
+}
+
+small {
+    color: var(--color-text-muted);
+}
+
+/* --- Missions --- */
+#missions {
+    list-style: none;
+    padding-left: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.9em;
+}
+
+#missions li {
+    margin-bottom: 5px;
+    padding: 3px 0;
+    border-bottom: 1px dashed rgba(89, 255, 201, 0.1);
+}
+
+/* --- Controls & Pairs Row --- */
+.controls-pairs-row {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+.control-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+/* --- Live Pairs --- */
+.pair {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(255, 89, 131, 0.2);
+}
+
+.pair .sym {
+    color: var(--color-neon-primary);
+}
+
+.pair .price {
+    font-weight: 600;
+}
+
+.pair .price.up {
+    color: var(--color-up);
+}
+
+.pair .price.down {
+    color: var(--color-down);
+}
+
+.pair .price.muted {
+    color: var(--color-text-muted);
+}
+
+/* --- Activity Log --- */
+#activity {
+    max-height: 300px;
+    overflow-y: scroll;
+    padding-right: 10px;
+    font-size: 0.85em;
+    color: var(--color-text-muted);
+}
+
+/* Scrollbar styling (opsional) */
+#activity::-webkit-scrollbar {
+    width: 6px;
+}
+#activity::-webkit-scrollbar-thumb {
+    background: var(--color-neon-secondary);
+    border-radius: 3px;
+}
+
+/* --- Game Frame Integration --- */
 .game-frame {
-    /* Membuat game frame mengambil seluruh lebar di baris bawah */
+    /* Mengambil seluruh lebar di baris Grid bawah */
     grid-column: 1 / -1; 
     min-height: 450px; 
     padding: 10px;
@@ -37,29 +247,10 @@
     border: 2px solid var(--color-neon-primary); 
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+    background-color: #000; /* Fallback untuk iframe */
 }
 
-/* --- GAYA TAMBAHAN LAINNYA --- */
-
-/* LOGO dan FOOTER */
-
-.header-left {
-    display: flex;
-    align-items: center; 
-    gap: 15px; 
-}
-
-.logo {
-    height: 50px; 
-    width: auto;
-    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); 
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-}
-
+/* --- Footer --- */
 .footer {
     text-align: center;
     padding: 20px;
@@ -67,293 +258,51 @@
     border-top: 1px dashed var(--color-neon-secondary);
     color: var(--color-text-muted);
     font-size: 0.85em;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.footer p {
-    margin: 5px 0;
-}
-}
-
-/* --- GAYA TOMBOL NEON --- */
-.btn-primary, .btn-secondary {
-    padding: 10px 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-family: 'Rajdhani', sans-serif;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-}
-
-.btn-primary {
-    background-color: var(--color-neon-primary);
-    color: var(--color-bg-dark);
-    box-shadow: 0 0 15px rgba(89, 255, 201, 0.7);
-}
-
-.btn-primary:hover {
-    filter: brightness(1.2); /* Sedikit lebih terang saat hover */
-    box-shadow: 0 0 25px var(--color-neon-primary);
-}
-
-.btn-secondary {
-    background-color: var(--color-bg-card);
-    color: var(--color-neon-primary);
-    border: 1px solid var(--color-neon-primary);
-}
-
-.btn-secondary:hover {
-    background-color: var(--color-neon-primary);
-    color: var(--color-bg-dark);
-    box-shadow: 0 0 15px var(--color-neon-primary);
-}
-
-
-/* --- LAYOUT DASHBOARD (GRID) --- */
-.dashboard {
-    display: grid;
-    grid-template-columns: 3fr 1fr; /* Chart 75%, Side Panel 25% */
-    gap: 25px;
-    margin-bottom: 25px;
-}
-
-/* --- GAYA CARD/PANEL UMUM --- */
-.chart-panel, .side-panel .card, .activity-panel {
-    background: var(--color-bg-card);
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid var(--color-neon-secondary);
-    box-shadow: inset 0 0 8px rgba(89, 255, 201, 0.1), 0 0 10px rgba(0, 0, 0, 0.5); /* Inner & Outer Shadow */
-}
-
-h3 {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--color-neon-primary);
-    border-bottom: 1px dashed var(--color-neon-secondary);
-    padding-bottom: 8px;
-    margin-top: 0;
-    font-size: 1.2em;
-    letter-spacing: 1px;
-}
-
-/* --- STATS PANEL --- */
-.stats-panel {
-    grid-column: 1 / -1; 
-    display: flex;
-    justify-content: space-around;
-    gap: 25px;
-}
-
-.stat-card {
-    flex: 1;
-    background: linear-gradient(145deg, #100018, #05000a); /* Gradasi pada card */
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    border: 1px solid #1a0033;
-    transition: transform 0.3s;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(89, 255, 201, 0.3);
-}
-
-/* GAYA NILAI UTAMA POIN (Fokus Neon Glow) */
-.value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 3.5em;
-    font-weight: 700;
-    color: var(--color-neon-primary);
-    text-shadow: 0 0 20px var(--color-neon-primary), 0 0 30px rgba(89, 255, 201, 0.5);
-    margin: 5px 0;
-    transition: color 0.3s;
-}
-
-.value.off {
-    color: var(--color-error); 
-    text-shadow: 0 0 10px var(--color-error);
-}
-
-/* --- LIVE PAIRS --- */
-.pair {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dotted var(--color-neon-secondary);
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 600;
-}
-
-.pair .price.up {
-    color: #51ff8a; 
-    text-shadow: 0 0 3px #51ff8a;
-}
-
-.pair .price.down {
-    color: var(--color-error); 
-    text-shadow: 0 0 3px var(--color-error);
-}
-
-/* --- ACTIVE MISSIONS --- */
-#missions li {
-    padding: 5px 0;
-    color: var(--color-text-main);
-    font-size: 0.9em;
-    border-bottom: 1px dotted var(--color-neon-secondary);
-}
-
-/* --- RECENT ACTIVITY --- */
-.activity-panel {
-    grid-column: 1 / -1; 
-}
-
-#activity {
-    height: 250px;
-    overflow-y: scroll;
-    padding-right: 15px; 
-    font-size: 0.9em;
-    color: var(--color-text-muted);
-}
-
-#activity div {
-    padding: 4px 0;
-    border-bottom: 1px dotted #ffffff1a;
-    font-family: 'Space Mono', monospace; /* Font Terminal untuk log */
-}
-
-/* --- TOAST NOTIFICATION --- */
-.toast {
-    /* (Gaya toast dipertahankan dari yang sebelumnya, memastikan kontras) */
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-    opacity: 0.9;
-    display: none;
-}
-
-/* --- RESPONSIVE (Penting untuk HP) --- */
-@media (max-width: 1024px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
-
-    .stats-panel {
-        flex-direction: column;
-        gap: 15px;
-    }
-
+/* --- Responsiveness (Mobile) --- */
+@media (max-width: 768px) {
+    
     header {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        gap: 10px;
     }
     
-    h1 {
-        margin-bottom: 15px;
-    }
-
     .controls {
+        width: 100%;
         flex-direction: column;
-        width: 100%;
+        gap: 5px;
     }
-
-    #wallet-input {
+    
+    .controls input, .controls button {
         width: 100%;
-        box-sizing: border-box;
+        text-align: center;
     }
-
-    .btn-primary, .btn-secondary {
-        width: 100%;
+    
+    .main-content {
+        /* Pindah ke layout 1 kolom di ponsel */
+        grid-template-columns: 1fr;
+    }
+    
+    .column.left, .column.right {
+        grid-column: 1 / 2;
+    }
+    
+    /* Atur ulang urutan elemen agar game di bawah semua data */
+    .game-frame {
+        order: 4; /* Pindahkan game frame ke bawah */
+        min-height: 350px;
+    }
+    
+    #pacman-game {
+        height: 320px;
+    }
+    
+    .activity {
+        order: 5;
     }
 }
-/* --- Tambahan untuk Logo dan Footer --- */
-
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Jarak antara logo dan judul */
-}
-
-.logo {
-    height: 100px; /* Sesuaikan ukuran logo */
-    width: auto;
-    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); /* Neon glow pada logo */
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05); /* Sedikit membesar saat hover */
-}
-
-.footer {
-    text-align: center;
-    padding: 20px;
-    margin-top: 30px;
-    border-top: 1px dashed var(--color-neon-secondary);
-    color: var(--color-text-muted);
-    font-size: 0.85em;
-}
-
-.footer p {
-    margin: 5px 0;
-}
-/* --- GAYA UNTUK LOGO DS.PNG --- */
-
-.header-left {
-    display: flex;
-    align-items: center; /* Untuk menyejajarkan logo dan teks judul secara vertikal */
-    gap: 15px; /* Memberi jarak antara logo dan judul */
-}
-
-.logo {
-    height: 50px; /* Ukuran yang pas untuk logo di header */
-    width: auto;
-    /* Memberikan efek neon glow pada logo itu sendiri */
-    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); 
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05); /* Efek visual saat kursor di atas logo */
-}
-
-/* Jika sebelumnya Anda menambahkan footer, gaya ini akan membuatnya rapi */
-.footer {
-    text-align: center;
-    padding: 20px;
-    margin-top: 30px;
-    border-top: 1px dashed var(--color-neon-secondary);
-    color: var(--color-text-muted);
-    font-size: 0.85em;
-}
-
-.footer p {
-    margin: 5px 0;
-}
-/* --- GAYA UNTUK IFRAME MINIGAME --- */
-
-.game-frame {
-    /* Gaya untuk kartu container minigame */
-    grid-column: 1 / -1; /* Asumsi: Biarkan minigame mengambil seluruh lebar di baris bawah */
-    /* Jika ingin di samping, gunakan grid-column: 2 / 3; atau sesuaikan */
-    min-height: 450px; 
-    padding: 10px;
-}
-
-#pacman-game {
-    width: 100%;
-    height: 420px; /* Cukup tinggi untuk menampilkan game */
-    border: 2px solid var(--color-neon-primary); /* Border neon di sekitar game */
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
-    /* Penting: background-color disetel di pacman.css */
-}
-
-
