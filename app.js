@@ -85,19 +85,21 @@ function updateChart() {
 }
 
 
-// --- 4. HANDLER GLOBAL (UNTUK SDK) ---
+// --- 4. HANDLER GLOBAL (UNTUK SDK & MINIGAME) ---
 
-window.onPointsUpdate = function(wallet, p) {
+window.onPointsUpdate = function(source, p) {
     const last = parseInt(pointsEl.textContent.replace(/[^0-9]/g, '')) || 0;
-    const delta = p - last;
-    pointsEl.textContent = Number(p).toLocaleString();
-    if (delta > 0) toast('Points +' + delta, 'success');
+    const newTotal = last + p; // Tambahkan poin, jangan replace
     
-    pointsHistory.push(p);
+    pointsEl.textContent = Number(newTotal).toLocaleString();
+    if (p > 0) toast('Points +' + p, 'success');
+    
+    // Perbarui riwayat dengan total poin baru (bukan delta)
+    pointsHistory.push(newTotal); 
     if (pointsHistory.length > 60) pointsHistory.shift();
     updateChart();
     
-    appendActivity('Points: ' + p.toLocaleString());
+    appendActivity(`Points: +${p} dari ${source}. Total: ${newTotal.toLocaleString()}`);
 }
 
 window.onMissionUpdate = function(wallet, mission) {
@@ -135,7 +137,8 @@ const ProStream = {
             currentStreamAdapter = new window.SDSStreamAdapter({
                 wallet: wallet,
                 useMock: useMock,
-                onPoints: window.onPointsUpdate,
+                // Menggunakan sumber 'SDS Stream'
+                onPoints: (w, p) => window.onPointsUpdate('SDS Stream', p),
                 onEvent: window.onStreamStatus,
                 onError: (e) => window.onStreamStatus(`Error: ${e.message}`, false)
             });
@@ -218,7 +221,7 @@ const ProStream = {
     },
 };
 
-// --- 6. FUNGSI INISIALISASI ---
+// --- 6. FUNGSI INISIALISASI LIVE PAIRS ---
 
 function initPairs() {
     const pairs = ProStream.DEFAULT_PAIRS;
@@ -232,14 +235,12 @@ function initPairs() {
     const listeners = {};
 
     pairs.forEach(sym => {
-        // --- 1. MEMBUAT ELEMENT HTML ---
         const el = document.createElement('div');
         el.className = 'pair';
         el.id = 'pair-' + sym;
         
         const symEl = document.createElement('div');
         symEl.className = 'sym';
-        // Format koin: SOMUSDT menjadi SOM/USDT
         symEl.textContent = sym.replace('USDT', '/USDT').replace('BNB', '/BNB').replace('ETH', '/ETH');
         
         const priceEl = document.createElement('div');
@@ -250,14 +251,12 @@ function initPairs() {
         el.appendChild(priceEl);
         pairsContainer.appendChild(el);
         
-        // --- 2. DEFINISI LISTENER DENGAN REFERENSI LANGSUNG KE priceEl ---
         listeners[sym] = (d) => {
             const price = parseFloat(d.c).toFixed(4); 
             const priceChangePercent = parseFloat(d.P);
             
             priceEl.textContent = '$' + Number(price).toLocaleString();
             
-            // Logika UP/DOWN
             if (priceChangePercent >= 0) {
                 priceEl.className = 'price up';
             } else {
@@ -270,7 +269,7 @@ function initPairs() {
 }
 
 
-// --- 7. EVENT LISTENERS ---
+// --- 7. EVENT LISTENERS UTAMA ---
 
 btnConnect.addEventListener('click', () => {
     const w = walletInput.value.trim();
@@ -292,7 +291,7 @@ btnConnect.addEventListener('click', () => {
 
 btnMeta.addEventListener('click', async () => {
     if (!window.ethereum || typeof ethers === 'undefined') {
-        toast('MetaMask not found or Ethers.js not loaded. Check index.html for CDN.', 'error');
+        toast('MetaMask not found or Ethers.js not loaded.', 'error');
         return;
     }
     try {
@@ -309,7 +308,7 @@ btnMeta.addEventListener('click', async () => {
 });
 
 btnClear.addEventListener('click', () => {
-    activityEl.innerHTML = '';
+    activityEl.innerHTML = '<div>[00:00:00] Status: Activity cleared.</div>';
     toast('Activity cleared');
 });
 
@@ -324,9 +323,19 @@ btnExport.addEventListener('click', () => {
 });
 
 
-// --- 8. INISIALISASI AWAL (Memastikan berjalan TANPA menunggu 'load') ---
+// --- 8. LISTENER UNTUK INTEGRASI MINIGAME (PAC-MAN) ---
 
-// Memanggil fungsi secara langsung untuk memastikan Live Pairs dan Chart segera dimuat, 
-// mengatasi masalah timing pada browser seluler.
+window.addEventListener('message', (event) => {
+    // Cek apakah pesan berasal dari game Pac-Man
+    if (event.data && event.data.type === 'SOMNIA_POINT_EVENT') {
+        const pointsGained = event.data.points;
+        // Panggil handler poin utama, menggunakan sumber 'Pacman Game'
+        window.onPointsUpdate('Pacman Game', pointsGained);
+    }
+});
+
+
+// --- 9. INISIALISASI AWAL (Memastikan berjalan TANPA menunggu 'load') ---
+
 initPairs(); 
 initChart();
