@@ -142,3 +142,36 @@ body {
   .grid { grid-template-columns: 1fr; padding: 12px; }
   .nav-right input { min-width: 120px; }
 }
+/* --- Tambahkan ke style.css --- */
+
+.toast {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.toast.info {
+    background-color: #1a0033;
+    color: #b98fff;
+    border: 1px solid #7f32ff;
+}
+
+.toast.error {
+    background-color: #3c0000;
+    color: #ff4f6f;
+    border: 1px solid #ff4f6f;
+}
+
+.toast.success {
+    background-color: #003c00;
+    color: #51ff8a;
+    border: 1px solid #51ff8a;
+}
+
