@@ -223,35 +223,63 @@ btnExport.addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// --- FUNGSI INISIALISASI ---
+// app.js - Ganti fungsi initPairs() Anda dengan kode ini:
 
 function initPairs() {
     const pairs = ProStream.DEFAULT_PAIRS;
-    if (pairsContainer) pairsContainer.innerHTML = ''; 
     
+    // Pastikan container ada dan bersih
+    if (pairsContainer) {
+        pairsContainer.innerHTML = '';
+    } else {
+        console.error("Pairs container not found.");
+        return;
+    }
+    
+    const listeners = {};
+
     pairs.forEach(sym => {
+        // --- 1. MEMBUAT ELEMENT HTML UNTUK SETIAP PAIR ---
         const el = document.createElement('div');
         el.className = 'pair';
         el.id = 'pair-' + sym;
-        el.innerHTML = `<div class="sym">${sym.replace('USDT', '/USDT')}</div><div class="price muted">-</div>`;
-        if (pairsContainer) pairsContainer.appendChild(el);
-    });
-    
-    const listeners = {};
-    pairs.forEach(sym => {
+        
+        // Membuat elemen Sym dan Price secara terpisah untuk akses mudah
+        const symEl = document.createElement('div');
+        symEl.className = 'sym';
+        symEl.textContent = sym.replace('USDT', '/USDT');
+        
+        const priceEl = document.createElement('div');
+        priceEl.className = 'price muted';
+        priceEl.textContent = '-'; 
+        
+        el.appendChild(symEl);
+        el.appendChild(priceEl);
+        
+        pairsContainer.appendChild(el);
+        
+        // --- 2. DEFINISI LISTENER DENGAN REFERENSI LANGSUNG KE priceEl ---
         listeners[sym] = (d) => {
+            // Menggunakan 'c' (Last Price) dan 'P' (Percentage Price Change)
             const price = parseFloat(d.c).toFixed(2);
-            const el = document.querySelector('#pair-' + sym + ' .price');
             const priceChangePercent = parseFloat(d.P);
-            if (el) {
-                el.textContent = '$' + Number(price).toLocaleString();
-                el.className = 'price ' + (priceChangePercent >= 0 ? 'up' : 'down');
+            
+            // Mengupdate konten dan gaya menggunakan referensi priceEl
+            priceEl.textContent = '$' + Number(price).toLocaleString();
+            
+            // Logika UP/DOWN
+            if (priceChangePercent >= 0) {
+                priceEl.className = 'price up';
+            } else {
+                priceEl.className = 'price down';
             }
         };
     });
     
+    // Memulai koneksi WebSocket dengan listeners yang sudah dibuat
     ProStream.startPairsWS(pairs, listeners);
 }
+
 
 
 window.addEventListener('load', () => {
