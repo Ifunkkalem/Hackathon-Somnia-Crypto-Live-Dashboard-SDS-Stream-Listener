@@ -1,6 +1,4 @@
-// app.js - REVISI AKHIR: Memperbaiki urutan/scope agar stream adapter berjalan
-
-// --- 1. DEKLARASI KONSTANTA DAN VARIABEL (TOP SECTION) ---
+// app.js - KODE FINAL: Memperbaiki scope, WSS, dan urutan
 const btnConnect = document.getElementById('btn-connect');
 const btnMeta = document.getElementById('btn-metamask');
 const walletInput = document.getElementById('wallet-input');
@@ -16,15 +14,16 @@ const toastEl = document.getElementById('toast');
 
 let chart = null;
 let pointsHistory = [];
-let currentStreamAdapter = null; // Variabel global untuk adapter
+let currentStreamAdapter = null;
 
-// --- 2. FUNGSI UTILITAS UI (HARUS DI ATAS HANDLER) ---
+// --- FUNGSI UTILITAS UI ---
 
-function toast(msg) {
+function toast(msg, type = 'info') {
     if (toastEl) {
         toastEl.textContent = msg;
+        toastEl.className = 'toast ' + type;
         toastEl.style.display = 'block';
-        setTimeout(() => toastEl.style.display = 'none', 2200);
+        setTimeout(() => toastEl.style.display = 'none', 2500);
     }
 }
 
@@ -38,18 +37,19 @@ function setStatus(text, on = true) {
 function appendActivity(msg) {
     if (activityEl) {
         const d = document.createElement('div');
-        d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+        d.textContent = '[' + new Date().toLocaleTimeString('id-ID') + '] ' + msg;
         activityEl.prepend(d);
+        // Batasi log
+        if (activityEl.children.length > 20) {
+            activityEl.removeChild(activityEl.lastChild);
+        }
     }
 }
 
-// --- 3. FUNGSI CHART (HARUS DI ATAS HANDLER UPDATE) ---
+// --- FUNGSI CHART ---
 
 function initChart() {
-    if (typeof Chart === 'undefined') {
-        console.error("Chart.js is not loaded.");
-        return;
-    }
+    if (typeof Chart === 'undefined') return;
     const ctx = document.getElementById('pointsChart').getContext('2d');
     if (!ctx) return; 
     
@@ -80,17 +80,18 @@ function updateChart() {
     chart.update();
 }
 
-// --- 4. HANDLER GLOBAL WINDOW.ON... (DIPINDAHKAN KE ATAS PROSTREAM) ---
+
+// --- HANDLER GLOBAL (DIPINDAHKAN KE ATAS PROSTREAM) ---
 
 window.onPointsUpdate = function(wallet, p) {
     const last = parseInt(pointsEl.textContent.replace(/[^0-9]/g, '')) || 0;
     const delta = p - last;
     pointsEl.textContent = Number(p).toLocaleString();
-    if (delta > 0) toast('Points +' + delta);
+    if (delta > 0) toast('Points +' + delta, 'success');
     
     pointsHistory.push(p);
     if (pointsHistory.length > 60) pointsHistory.shift();
-    updateChart(); // Sekarang updateChart sudah terdefinisi
+    updateChart();
     
     appendActivity('Points: ' + p.toLocaleString());
 }
@@ -100,7 +101,7 @@ window.onMissionUpdate = function(wallet, mission) {
     li.textContent = mission.name + ' — Completed';
     if (missionsList) missionsList.prepend(li);
     appendActivity('Mission: ' + mission.name);
-    toast('Mission complete');
+    toast('Mission complete', 'success');
 }
 
 window.onStreamStatus = function(txt, on = true) {
@@ -113,39 +114,39 @@ window.onStreamLog = function(txt) {
 }
 
 
-// --- 5. ADAPTER CONTROLLER (PROSTREAM) ---
+// --- ADAPTER CONTROLLER (PROSTREAM) ---
 
 const ProStream = {
     DEFAULT_PAIRS: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT'],
     
-    // FUNGSI INI AKAN BERJALAN DENGAN SEMUA HANDLER SUDAH TERSEDIA
     trackWallet: function(wallet) {
         if (currentStreamAdapter) {
             currentStreamAdapter.disconnect();
         }
         
-        // Pastikan SDSStreamAdapter sudah dimuat dari stream_adapter.js
+        const useMock = toggleSim.checked;
+        
         if (window.SDSStreamAdapter) {
             currentStreamAdapter = new window.SDSStreamAdapter({
                 wallet: wallet,
+                useMock: useMock, // Tambahkan opsi ini jika SDK punya mode mock
                 onPoints: window.onPointsUpdate,
                 onEvent: window.onStreamStatus,
                 onError: (e) => window.onStreamStatus(`Error: ${e.message}`, false)
             });
             currentStreamAdapter.connect();
         } else {
-            window.onStreamStatus("Error: Adapter not found! Check stream_adapter.js load order.", false);
+            window.onStreamStatus("Error: Adapter not found!", false);
         }
     },
     
     startPairsWS: function(pairs, listeners) {
-        // PERHATIAN: Memastikan WSS:// digunakan!
+        // MENGGUNAKAN WSS:// DENGAN URL YANG LEBIH STABIL
         const binanceWS = new WebSocket('wss://stream.binance.com/ws/!miniTicker@arr'); 
         
-        // ... (Logika WebSocket lainnya, ini sudah benar) ...
         binanceWS.onopen = () => appendActivity('Binance WS connected');
         binanceWS.onerror = (e) => { 
-            appendActivity('Binance WS error! Cek konsol browser.'); 
+            appendActivity('Binance WS error! Live Pairs mungkin gagal dimuat.'); 
             console.error("WebSocket Error:", e);
         }
         binanceWS.onclose = () => appendActivity('Binance WS disconnected.');
@@ -168,7 +169,7 @@ const ProStream = {
     }
 };
 
-// --- 6. EVENT LISTENERS (LOGIKA TOMBOL) ---
+// --- EVENT LISTENERS ---
 
 btnConnect.addEventListener('click', () => {
     const w = walletInput.value.trim();
@@ -185,14 +186,13 @@ btnConnect.addEventListener('click', () => {
     
     setStatus('Connecting...', false);
     
-    // Panggil trackWallet untuk memulai stream poin Somnia
     ProStream.trackWallet(w); 
 });
 
 btnMeta.addEventListener('click', async () => {
-    // Logika Metamask (Sudah Benar)
+    // Memeriksa Ethers.js
     if (!window.ethereum || typeof ethers === 'undefined') {
-        toast('MetaMask not found or Ethers.js not loaded.');
+        toast('MetaMask not found or Ethers.js not loaded. Check index.html for CDN.', 'error');
         return;
     }
     try {
@@ -201,9 +201,9 @@ btnMeta.addEventListener('click', async () => {
         const signer = provider.getSigner();
         const addr = await signer.getAddress();
         walletInput.value = addr;
-        toast('Connected: ' + addr.substring(0, 6) + '...');
+        toast('Connected: ' + addr.substring(0, 6) + '...', 'success');
     } catch (e) {
-        toast('MetaMask connection failed.', false);
+        toast('MetaMask connection failed.', 'error');
         console.error("MetaMask Error:", e);
     }
 });
@@ -223,10 +223,12 @@ btnExport.addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// --- 7. FUNGSI INISIALISASI (saat DOM dimuat) ---
+// --- FUNGSI INISIALISASI ---
 
 function initPairs() {
     const pairs = ProStream.DEFAULT_PAIRS;
+    if (pairsContainer) pairsContainer.innerHTML = ''; 
+    
     pairs.forEach(sym => {
         const el = document.createElement('div');
         el.className = 'pair';
