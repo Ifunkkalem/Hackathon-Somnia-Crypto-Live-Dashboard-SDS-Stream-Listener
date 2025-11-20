@@ -272,3 +272,35 @@ h3 {
         width: 100%;
     }
 }
+/* --- Tambahan untuk Logo dan Footer --- */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Jarak antara logo dan judul */
+}
+
+.logo {
+    height: 100px; /* Sesuaikan ukuran logo */
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); /* Neon glow pada logo */
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05); /* Sedikit membesar saat hover */
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    border-top: 1px dashed var(--color-neon-secondary);
+    color: var(--color-text-muted);
+    font-size: 0.85em;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
