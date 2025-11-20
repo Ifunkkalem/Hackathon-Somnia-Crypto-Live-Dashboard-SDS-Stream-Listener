@@ -3,87 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DreamStream PRO+</title>
-    <link rel="stylesheet" href="style.css?v=20251120"> 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <title>DreamStream PRO+ | Somnia Hackathon</title>
     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-<header>
-    <div class="header-left">
-        <img src="Ds.png" alt="DreamStream PRO+ Logo" class="logo">
-        <h1>DreamStream PRO+</h1>
-    </div>
-    <div class="controls">
-        <input type="text" id="wallet-input" placeholder="Wallet Address atau Mock Address" value="0xMockStreamTest" />
-        <button id="btn-connect" class="btn-primary">Track Wallet</button>
-        <button id="btn-metamask" class="btn-secondary">Connect Metamask</button>
-    </div>
-</header>
 
+    <header>
+        <div class="header-left">
+            <img src="Ds.png" alt="DreamStream PRO+ Logo" class="logo">
+            <h1>DreamStream PRO+</h1>
+        </div>
+        <div class="controls">
+            <input type="text" id="wallet-input" placeholder="Wallet Address atau Mock Address" value="0xMockStreamTest" />
+            <button id="btn-connect" class="btn-primary">Track Wallet</button>
+            <button id="btn-metamask" class="btn-secondary">Connect Metamask</button>
+        </div>
+    </header>
 
-        <section class="dashboard">
-            <div class="stats-panel">
-                <div class="stat-card">
+    <div class="main-content">
+        
+        <section class="column left">
+            <div class="card metrics-row">
+                <div class="metric">
                     <h3>Points</h3>
                     <div id="points" class="value">0</div>
-                    <p>Total Points Earned</p>
+                    <small>Total Points Earned</small>
                 </div>
-                <div class="stat-card">
+                
+                <div class="metric">
                     <h3>Stream Status</h3>
-                    <div id="stream-status" class="value off">Disconnected</div>
-                    <p>Somnia SDS Stream</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Active Missions</h3>
-                    <ul id="missions"></ul>
+                    <div id="stream-status" class="value off">DISCONNECTED</div>
+                    <small>Somnia SDS Stream</small>
                 </div>
             </div>
 
-            <div class="chart-panel">
+            <section class="card chart-card">
                 <h3>Points History</h3>
                 <canvas id="pointsChart"></canvas>
-            </div>
+            </section>
+        </section>
+
+        <section class="column right">
             
-            <div class="side-panel">
-                <div class="card">
+            <section class="card">
+                <h3>Active Missions</h3>
+                <ul id="missions">
+                    <li>- No wallet tracked</li>
+                </ul>
+            </section>
+            
+            <div class="controls-pairs-row">
+                <section class="card live-pairs">
                     <h3>Live Pairs</h3>
-                    <div id="pairs" class="pair-list">
+                    <div id="pairs">
                         </div>
-                </div>
-                <div class="card controls-panel">
+                </section>
+                
+                <section class="card controls">
                     <h3>Controls</h3>
-                    <p>Mock Somnia Stream: <input type="checkbox" id="toggle-sim" checked></p>
-                    <button id="btn-clear" class="btn-clear">Clear Activity</button>
-                    <button id="btn-export" class="btn-secondary">Export Log</button>
-                </div>
+                    <div class="control-buttons">
+                        <label for="toggle-sim">Mock Somnia Stream</label>
+                        <input type="checkbox" id="toggle-sim" checked>
+                    </div>
+                    <div class="control-buttons">
+                        <button id="btn-clear" class="btn-secondary">Clear Activity</button>
+                        <button id="btn-export" class="btn-secondary">Export Log</button>
+                    </div>
+                </section>
             </div>
-        <section class="card game-frame">
-                   <h3>Dream Streamer Minigame</h3>
-                   <iframe src="pacman.html" id="pacman-game" frameborder="0"></iframe>
-        </section>
-
             
         </section>
-
-        <section class="activity-panel">
-            <h3>Recent Activity</h3>
-            <div id="activity"></div>
+        
+        <section class="card game-frame">
+            <h3>Dream Streamer Minigame</h3>
+            <iframe src="pacman.html" id="pacman-game" frameborder="0"></iframe>
         </section>
-    </div>
-    
-    <div id="toast" class="toast"></div>
+        
+        <section class="card activity">
+            <h3>Recent Activity</h3>
+            <div id="activity">
+                <div>[00:00:00] Status: Siap Melacak Data Stream.</div>
+            </div>
+        </section>
+    </div> <div id="toast" class="toast"></div>
+
+    <footer class="footer">
+        <p>&copy; 2023 Dibuat oleh [**Ganti dengan Nama Anda**]</p>
+        <p>Hackathon Somnia Crypto Dashboard</p>
+    </footer>
 
     <script src="stream_adapter.js"></script>
     <script src="app.js"></script>
-    
-    <footer class="footer"> <p>&copy; 2025 Dibuat oleh [ifunkkalem]</p> <p>Hackathon Somnia Crypto Dashboard</p>
-    </footer>
 
 </body>
 </html>
