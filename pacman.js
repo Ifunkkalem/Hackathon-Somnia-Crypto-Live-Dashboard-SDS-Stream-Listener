@@ -1,13 +1,12 @@
-// pacman.js - Logika Game Pac-Man (Pergerakan dan Pengumpulan Poin)
+// pacman.js - Logika Game Pac-Man (Pergerakan, Poin, dan Kontrol Sentuh)
 
 const gridContainer = document.getElementById('grid-container');
 const scoreDisplay = document.getElementById('score');
 const statusMessage = document.getElementById('status-message');
-const width = 20; // 20 kotak lebar
+const width = 20; 
 let squares = [];
 let score = 0;
 let pacmanCurrentIndex = 301; 
-let gameInterval;
 let isGameRunning = false;
 
 // 0 - Jalan/Kosong, 1 - Dinding, 2 - Titik (Dot/Point)
@@ -35,7 +34,10 @@ const layout = [
 // --- FUNGSI UTAMA ---
 
 function createGrid() {
-    gridContainer.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
+    // Pastikan lebar grid disesuaikan dengan viewport
+    const squareSize = window.innerWidth <= 600 ? 15 : 20; 
+    gridContainer.style.gridTemplateColumns = `repeat(${width}, ${squareSize}px)`;
+
     for (let i = 0; i < layout.length; i++) {
         const square = document.createElement('div');
         square.classList.add('square');
@@ -54,24 +56,16 @@ function createGrid() {
 }
 
 function collectDot() {
-    // 1. Cek apakah di posisi Pac-Man ada Dot (Titik)
     if (squares[pacmanCurrentIndex].classList.contains('dot')) {
         
-        // 2. Hapus Dot (Poin Stream dikumpulkan)
         squares[pacmanCurrentIndex].classList.remove('dot');
         
-        // 3. Tambahkan Skor
         score++;
         scoreDisplay.textContent = score;
         
-        // 4. Integrasi Somnia (Simulasi Kirim Poin ke Dashboard Utama)
-        // Kita berasumsi Dashboard utama terhubung.
-        // Kirim 1 poin setiap kali Dot dikumpulkan.
-        if (window.onPointsUpdate) {
-             // window.onPointsUpdate dipanggil dari file app.js di dashboard utama
-             // Kita akan menggunakan 'postMessage' untuk berkomunikasi antar-iframe/window
-             window.parent.postMessage({ type: 'SOMNIA_POINT_EVENT', points: 1 }, '*');
-        }
+        // Integrasi Somnia (Kirim Poin ke Dashboard Utama)
+        // Menggunakan window.parent karena game ada di dalam iframe
+        window.parent.postMessage({ type: 'SOMNIA_POINT_EVENT', points: 1 }, '*');
     }
 }
 
@@ -79,7 +73,6 @@ function collectDot() {
 function movePacman(e) {
     if (!isGameRunning) return;
     
-    // Hapus kelas pac-man dari posisi lama
     squares[pacmanCurrentIndex].classList.remove('pac-man');
     let nextIndex = pacmanCurrentIndex;
 
@@ -98,40 +91,43 @@ function movePacman(e) {
             nextIndex += width;
             break;
         default:
-            // Jika tombol lain, jangan lakukan apa-apa
             squares[pacmanCurrentIndex].classList.add('pac-man');
             return;
     }
     
-    // Cek Dinding (Wall) - layout[nextIndex] === 1
-    // Juga cek apakah Pac-Man keluar batas grid (tidak perlu jika peta dikelilingi dinding)
-    if (!squares[nextIndex].classList.contains('wall') && nextIndex >= 0 && nextIndex < layout.length) {
+    // Cek Dinding
+    if (nextIndex >= 0 && nextIndex < layout.length && !squares[nextIndex].classList.contains('wall')) {
         pacmanCurrentIndex = nextIndex;
-        collectDot(); // Kumpulkan Poin di posisi baru
+        collectDot(); // Kumpulkan Poin
     }
 
-    // Tambahkan kelas pac-man di posisi baru
     squares[pacmanCurrentIndex].classList.add('pac-man');
 }
 
 function startGame() {
     if (isGameRunning) return;
     isGameRunning = true;
-    score = 0;
-    scoreDisplay.textContent = score;
     statusMessage.textContent = 'Game berjalan. Kumpulkan Poin Stream!';
-    // Anda bisa menambahkan logika Ghost di sini (akan kita bahas selanjutnya)
-    // document.addEventListener('keyup', movePacman); // Sudah ditambahkan di bawah
 }
 
 
 // --- INICIALISASI & EVENT LISTENERS ---
 
 createGrid();
-document.addEventListener('keyup', movePacman); // Mendengarkan tombol panah
+document.addEventListener('keyup', movePacman); // Kontrol Keyboard (Desktop)
 
 document.getElementById('start-button').addEventListener('click', startGame);
 
-
-// Panggil fungsi untuk membuat grid saat file dimuat
-createGrid();
+// --- LISTENER UNTUK KONTROL SENTUH (MOBILE) ---
+document.querySelectorAll('.controls-mobile button').forEach(button => {
+    button.addEventListener('click', () => {
+        if (!isGameRunning) {
+            startGame();
+        }
+        
+        const key = button.getAttribute('data-key');
+        const touchEvent = { key: key };
+        
+        movePacman(touchEvent);
+    });
+});
