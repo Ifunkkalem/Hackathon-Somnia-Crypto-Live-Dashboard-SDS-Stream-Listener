@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Somnia Dream Streamer Game</title>
     <link rel="stylesheet" href="pacman.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-wrapper">
-        <h2>SOMNIA STREAMER GAME</h2>
         
         <div id="grid-container">
             </div>
@@ -16,8 +16,20 @@
         <div class="game-info">
             <p>Score Stream: <span id="score">0</span></p>
             <button id="start-button">Mulai Game</button>
-            <div id="status-message">Tekan Mulai untuk mengumpulkan Poin Stream.</div>
+            <div id="status-message">Tekan Mulai dan gunakan Panah Keyboard (atau kontrol sentuh).</div>
         </div>
+
+        <div class="controls-mobile">
+            <div class="row-control">
+                <button id="up-btn" data-key="ArrowUp">🔺</button>
+            </div>
+            <div class="row-control">
+                <button id="left-btn" data-key="ArrowLeft">◀️</button>
+                <button id="down-btn" data-key="ArrowDown">🔻</button>
+                <button id="right-btn" data-key="ArrowRight">▶️</button>
+            </div>
+        </div>
+
     </div>
 
     <script src="pacman.js"></script> 
