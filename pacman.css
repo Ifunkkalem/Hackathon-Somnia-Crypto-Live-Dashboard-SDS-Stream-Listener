@@ -1,36 +1,32 @@
 /* Styling Dasar Neon */
 body {
-    background-color: #0b0f19; /* Latar gelap */
-    color: #59ffc9; /* Warna teks neon */
-    font-family: 'Rajdhani', sans-serif; /* Gunakan font yang sama dengan dashboard */
+    background-color: #0b0f19; 
+    color: #59ffc9; 
+    font-family: 'Rajdhani', sans-serif; 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 100%; /* Penting untuk iframe */
     margin: 0;
-}
-
-h2 {
-    color: #ff5983; /* Judul merah muda neon */
-    text-shadow: 0 0 10px rgba(255, 89, 131, 0.7);
+    padding: 10px;
 }
 
 .game-wrapper {
     background-color: #1a1f2e;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(89, 255, 201, 0.5); /* Border glow */
+    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5); 
     text-align: center;
 }
 
 /* Styling Peta Game (GRID) */
 #grid-container {
-    width: 400px; /* Lebar total (20 kotak x 20px) */
-    height: 400px; /* Tinggi total */
+    width: 400px; 
+    height: 400px; 
     display: grid;
     border: 3px solid #59ffc9;
-    margin: 20px auto;
+    margin: 15px auto;
     background-color: #000;
 }
 
@@ -43,7 +39,7 @@ h2 {
 /* --- Definisi Elemen Game --- */
 
 .wall {
-    background-color: #0000ff; /* Dinding biru */
+    background-color: #0000ff; 
     border: 1px solid #3333ff;
     box-shadow: inset 0 0 5px rgba(0, 0, 255, 0.7);
 }
@@ -54,23 +50,91 @@ h2 {
     margin: 6px;
     height: 8px;
     width: 8px;
-    background-color: #fffe00; /* Titik kuning */
+    background-color: #fffe00; 
     box-shadow: 0 0 5px #fffe00;
 }
 
 .pac-man {
-    background-color: #ffff00; /* Pac-Man kuning */
+    background-color: #ffff00; 
     border-radius: 50%;
     box-shadow: 0 0 8px #ffff00;
 }
 
 .ghost {
-    background-color: #ff5983; /* Ghost/Error merah muda */
+    background-color: #ff5983; 
     border-radius: 50%;
     box-shadow: 0 0 8px #ff5983;
 }
 
-/* Gaya tombol */
+/* Gaya tombol START */
+#start-button {
+    background-color: #59ffc9;
+    color: #0b0f19;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+    transition: background-color 0.3s;
+}
+
+#start-button:hover {
+    background-color: #33e6b2;
+}
+
+#status-message {
+    margin-top: 5px;
+    color: #ff5983;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+/* --- Mobile Touch Controls --- */
+.controls-mobile {
+    margin-top: 20px;
+    display: none; 
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Tampilkan hanya di layar kecil (ponsel) */
+@media (max-width: 600px) {
+    .controls-mobile {
+        display: flex;
+    }
+    /* Kecilkan game map agar muat di layar ponsel */
+    #grid-container {
+        width: 300px; 
+        height: 300px;
+    }
+    .square {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.row-control {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.controls-mobile button {
+    background-color: #ff5983; 
+    color: #0b0f19;
+    border: none;
+    padding: 15px;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 89, 131, 0.7);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #start-button {
     background-color: #59ffc9;
     color: #0b0f19;
