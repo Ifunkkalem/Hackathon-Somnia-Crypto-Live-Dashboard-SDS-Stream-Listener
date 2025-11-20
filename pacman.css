@@ -1,13 +1,15 @@
-/* Styling Dasar Neon */
+/* pacman.css - FINAL VERSION */
+
+/* --- Styling Dasar Neon --- */
 body {
-    background-color: #0b0f19; 
-    color: #59ffc9; 
+    background-color: #0b0f19; /* Latar gelap yang sama dengan dashboard */
+    color: #59ffc9; /* Warna teks neon */
     font-family: 'Rajdhani', sans-serif; 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100%; /* Penting untuk iframe */
+    min-height: 100%; 
     margin: 0;
     padding: 10px;
 }
@@ -20,7 +22,7 @@ body {
     text-align: center;
 }
 
-/* Styling Peta Game (GRID) */
+/* --- Styling Peta Game (GRID) --- */
 #grid-container {
     width: 400px; 
     height: 400px; 
@@ -32,8 +34,14 @@ body {
 
 /* Styling setiap kotak di dalam Grid */
 .square {
+    /* Ukuran default untuk Desktop */
     width: 20px;
     height: 20px;
+    /* Penting: Pastikan elemen Pac-Man/Ghost yang ada di dalamnya bisa menempati ruang 100% */
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* --- Definisi Elemen Game --- */
@@ -58,12 +66,18 @@ body {
     background-color: #ffff00; 
     border-radius: 50%;
     box-shadow: 0 0 8px #ffff00;
+    /* PENTING: Gunakan 100% agar menutupi kotak */
+    height: 100%; 
+    width: 100%;
 }
 
 .ghost {
     background-color: #ff5983; 
     border-radius: 50%;
     box-shadow: 0 0 8px #ff5983;
+    /* PENTING: Gunakan 100% agar menutupi kotak */
+    height: 100%; 
+    width: 100%;
 }
 
 /* Gaya tombol START */
@@ -103,11 +117,14 @@ body {
     .controls-mobile {
         display: flex;
     }
+    
     /* Kecilkan game map agar muat di layar ponsel */
     #grid-container {
         width: 300px; 
         height: 300px;
     }
+    
+    /* Ukuran kotak yang lebih kecil untuk ponsel (15px sesuai JS) */
     .square {
         width: 15px;
         height: 15px;
@@ -134,25 +151,4 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-#start-button {
-    background-color: #59ffc9;
-    color: #0b0f19;
-    border: none;
-    padding: 10px 20px;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
-    transition: background-color 0.3s;
-}
-
-#start-button:hover {
-    background-color: #33e6b2;
-}
-
-#status-message {
-    margin-top: 10px;
-    color: #ff5983;
-    font-weight: bold;
 }
