@@ -1,77 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DreamStream PRO+ — Neo-Terminal</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamStream PRO+</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
 
-  <link rel="stylesheet" href="style.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
 </head>
-
 <body>
-  <nav class="nav">
-    <div class="brand">
-      <div class="logo">DS</div><span>DreamStream PRO+</span>
+    <div class="container">
+        <header>
+            <h1>DreamStream PRO+</h1>
+            <div class="controls">
+                <input type="text" id="wallet-input" placeholder="Wallet Address atau Mock Address" value="0xMockStreamTest" />
+                <button id="btn-connect" class="btn-primary">Track Wallet</button>
+                <button id="btn-metamask" class="btn-secondary">Connect Metamask</button>
+            </div>
+        </header>
+
+        <section class="dashboard">
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <h3>Points</h3>
+                    <div id="points" class="value">0</div>
+                    <p>Total Points Earned</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Stream Status</h3>
+                    <div id="stream-status" class="value off">Disconnected</div>
+                    <p>Somnia SDS Stream</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Missions</h3>
+                    <ul id="missions"></ul>
+                </div>
+            </div>
+
+            <div class="chart-panel">
+                <h3>Points History</h3>
+                <canvas id="pointsChart"></canvas>
+            </div>
+            
+            <div class="side-panel">
+                <div class="card">
+                    <h3>Live Pairs</h3>
+                    <div id="pairs" class="pair-list">
+                        </div>
+                </div>
+                <div class="card controls-panel">
+                    <h3>Controls</h3>
+                    <p>Mock Somnia Stream: <input type="checkbox" id="toggle-sim" checked></p>
+                    <button id="btn-clear" class="btn-clear">Clear Activity</button>
+                    <button id="btn-export" class="btn-secondary">Export Log</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="activity-panel">
+            <h3>Recent Activity</h3>
+            <div id="activity"></div>
+        </section>
     </div>
-    <div class="nav-right">
-      <input id="wallet-input" placeholder="Wallet 0x..." />
-      <button id="btn-connect">Track Wallet</button>
-      <button id="btn-metamask">Connect MetaMask</button>
-      <label class="toggle"><input type="checkbox" id="toggle-sim" checked /> Mock</label>
-    </div>
-  </nav>
+    
+    <div id="toast" class="toast"></div>
 
-  <main class="grid">
-    <section class="left-col">
-      <div class="card stats">
-        <div class="stat"><div class="label">Points</div><div id="points" class="value">0</div></div>
-        
-        <div class="stat"><div class="label">Missions</div><div id="missions-count" class="value">0</div></div>
-        
-        <div class="stat"><div class="label">Stream</div><div id="stream-status" class="value off">Disconnected</div></div>
-      </div>
+    <script src="stream_adapter.js"></script>
+    <script src="app.js"></script>
 
-      <div class="card chart-card">
-        <h3>Points History</h3>
-        <canvas id="pointsChart"></canvas>
-      </div>
-
-      <div class="card activity-card">
-        <h3>Recent Activity</h3>
-        <div id="activity" class="log">No events</div>
-      </div>
-    </section>
-
-    <aside class="right-col">
-      <div class="card pairs-card">
-        <h4>Live Pairs</h4>
-        <div id="pairs" class="pairs-grid"></div> 
-      </div>
-
-      <div class="card missions-card">
-        <h4>Active Missions</h4>
-        <ul id="missions" class="mission-list">
-          <li class="muted">No wallet tracked</li>
-        </ul>
-      </div>
-
-      <div class="card controls-card">
-        <h4>Controls</h4>
-        <button id="btn-clear">Clear Activity</button>
-        <button id="btn-export">Export Log</button>
-        <div class="note">Mock Somnia stream & Binance WS. Integrate Somnia SDK di adapter.</div>
-      </div>
-    </aside>
-  </main>
-
-  <div id="toast" class="toast"></div>
-
-  <footer class="footer">Hilldanime Labs • DreamStream PRO+ • Somnia Hackathon</footer>
-
-  <script src="stream_adapter.js"></script>
+</body>
+</html>
   <script src="app.js"></script>
 </body>
 </html>
