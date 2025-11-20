@@ -149,15 +149,14 @@ const ProStream = {
         const binanceWS = new WebSocket('wss://stream.binance.com/ws/!miniTicker@arr'); 
         let wsConnected = false;
         
-        // --- SIMULATOR HARGA (FALLBACK UNTUK PASANGAN BARU/FIKTIF) ---
+        // --- SIMULATOR HARGA (FALLBACK) ---
         const startMockPrices = () => {
             appendActivity('Status: Memulai Simulasi Harga untuk Live Pairs.');
             
             pairs.forEach(sym => {
-                let currentPrice = 0.5 + Math.random() * 0.5; // Harga awal simulasi
+                let currentPrice = 0.5 + Math.random() * 0.5; 
                 
                 setInterval(() => {
-                    // Simulasikan pergerakan harga kecil
                     const delta = (Math.random() - 0.5) * 0.01; 
                     currentPrice = currentPrice + delta;
                     
@@ -186,7 +185,6 @@ const ProStream = {
         
         binanceWS.onclose = () => {
             appendActivity('Binance WS disconnected.');
-            // Jika koneksi terputus dan belum pernah berhasil terhubung, jalankan simulasi
             if (!wsConnected) {
                  startMockPrices();
             }
@@ -206,7 +204,6 @@ const ProStream = {
             } catch (e) {
                 console.error("Binance data parse error:", e);
                 if (!wsConnected) {
-                    // Jika parsing gagal, fallback ke simulasi
                     startMockPrices();
                 }
             }
@@ -221,116 +218,59 @@ const ProStream = {
     },
 };
 
-// --- 6. EVENT LISTENERS ---
+// --- 6. FUNGSI INISIALISASI ---
 
-btnConnect.addEventListener('click', () => {
-    const w = walletInput.value.trim();
-    if (!w) {
-        alert('Enter wallet');
+function initPairs() {
+    const pairs = ProStream.DEFAULT_PAIRS;
+    
+    if (pairsContainer) {
+        pairsContainer.innerHTML = '';
+    } else {
         return;
     }
     
-    // Reset UI sebelum koneksi
-    pointsEl.textContent = '0';
-    missionsList.innerHTML = '';
-    activityEl.innerHTML = '';
-    pointsHistory = [];
-    
-    setStatus('Connecting...', false);
-    
-    Pro
-}
+    const listeners = {};
 
-
-// --- HANDLER GLOBAL (DIPINDAHKAN KE ATAS PROSTREAM) ---
-
-window.onPointsUpdate = function(wallet, p) {
-    const last = parseInt(pointsEl.textContent.replace(/[^0-9]/g, '')) || 0;
-    const delta = p - last;
-    pointsEl.textContent = Number(p).toLocaleString();
-    if (delta > 0) toast('Points +' + delta, 'success');
-    
-    pointsHistory.push(p);
-    if (pointsHistory.length > 60) pointsHistory.shift();
-    updateChart();
-    
-    appendActivity('Points: ' + p.toLocaleString());
-}
-
-window.onMissionUpdate = function(wallet, mission) {
-    const li = document.createElement('li');
-    li.textContent = mission.name + ' — Completed';
-    if (missionsList) missionsList.prepend(li);
-    appendActivity('Mission: ' + mission.name);
-    toast('Mission complete', 'success');
-}
-
-window.onStreamStatus = function(txt, on = true) {
-    setStatus(txt, on);
-    appendActivity('Status: ' + txt);
-}
-
-window.onStreamLog = function(txt) {
-    appendActivity('Log: ' + txt);
-}
-
-
-// --- ADAPTER CONTROLLER (PROSTREAM) ---
-
-const ProStream = {
-    DEFAULT_PAIRS: ['SOMUSDT', 'SOMBNB', 'SOMETH'],
-    
-    trackWallet: function(wallet) {
-        if (currentStreamAdapter) {
-            currentStreamAdapter.disconnect();
-        }
+    pairs.forEach(sym => {
+        // --- 1. MEMBUAT ELEMENT HTML ---
+        const el = document.createElement('div');
+        el.className = 'pair';
+        el.id = 'pair-' + sym;
         
-        const useMock = toggleSim.checked;
+        const symEl = document.createElement('div');
+        symEl.className = 'sym';
+        // Format koin: SOMUSDT menjadi SOM/USDT
+        symEl.textContent = sym.replace('USDT', '/USDT').replace('BNB', '/BNB').replace('ETH', '/ETH');
         
-        if (window.SDSStreamAdapter) {
-            currentStreamAdapter = new window.SDSStreamAdapter({
-                wallet: wallet,
-                useMock: useMock, // Tambahkan opsi ini jika SDK punya mode mock
-                onPoints: window.onPointsUpdate,
-                onEvent: window.onStreamStatus,
-                onError: (e) => window.onStreamStatus(`Error: ${e.message}`, false)
-            });
-            currentStreamAdapter.connect();
-        } else {
-            window.onStreamStatus("Error: Adapter not found!", false);
-        }
-    },
-    
-    startPairsWS: function(pairs, listeners) {
-        // MENGGUNAKAN WSS:// DENGAN URL YANG LEBIH STABIL
-        const binanceWS = new WebSocket('wss://stream.binance.com/ws/!miniTicker@arr'); 
+        const priceEl = document.createElement('div');
+        priceEl.className = 'price muted';
+        priceEl.textContent = '-'; 
         
-        binanceWS.onopen = () => appendActivity('Binance WS connected');
-        binanceWS.onerror = (e) => { 
-            appendActivity('Binance WS error! Live Pairs mungkin gagal dimuat.'); 
-            console.error("WebSocket Error:", e);
-        }
-        binanceWS.onclose = () => appendActivity('Binance WS disconnected.');
+        el.appendChild(symEl);
+        el.appendChild(priceEl);
+        pairsContainer.appendChild(el);
         
-        binanceWS.onmessage = (event) => { 
-            try {
-                const data = JSON.parse(event.data);
-                if (Array.isArray(data)) {
-                    data.forEach(ticker => {
-                        const symbol = ticker.s;
-                        if (listeners[symbol]) {
-                            listeners[symbol](ticker);
-                        }
-                    });
-                }
-            } catch (e) {
-                console.error("Binance data parse error:", e);
+        // --- 2. DEFINISI LISTENER DENGAN REFERENSI LANGSUNG KE priceEl ---
+        listeners[sym] = (d) => {
+            const price = parseFloat(d.c).toFixed(4); 
+            const priceChangePercent = parseFloat(d.P);
+            
+            priceEl.textContent = '$' + Number(price).toLocaleString();
+            
+            // Logika UP/DOWN
+            if (priceChangePercent >= 0) {
+                priceEl.className = 'price up';
+            } else {
+                priceEl.className = 'price down';
             }
         };
-    }
-};
+    });
+    
+    ProStream.startPairsWS(pairs, listeners);
+}
 
-// --- EVENT LISTENERS ---
+
+// --- 7. EVENT LISTENERS ---
 
 btnConnect.addEventListener('click', () => {
     const w = walletInput.value.trim();
@@ -351,7 +291,6 @@ btnConnect.addEventListener('click', () => {
 });
 
 btnMeta.addEventListener('click', async () => {
-    // Memeriksa Ethers.js
     if (!window.ethereum || typeof ethers === 'undefined') {
         toast('MetaMask not found or Ethers.js not loaded. Check index.html for CDN.', 'error');
         return;
@@ -384,67 +323,10 @@ btnExport.addEventListener('click', () => {
     URL.revokeObjectURL(url);
 });
 
-// app.js - Ganti fungsi initPairs() Anda dengan kode ini:
 
-function initPairs() {
-    const pairs = ProStream.DEFAULT_PAIRS;
-    
-    // Pastikan container ada dan bersih
-    if (pairsContainer) {
-        pairsContainer.innerHTML = '';
-    } else {
-        console.error("Pairs container not found.");
-        return;
-    }
-    
-    const listeners = {};
+// --- 8. INISIALISASI AWAL (Memastikan berjalan TANPA menunggu 'load') ---
 
-    pairs.forEach(sym => {
-        // --- 1. MEMBUAT ELEMENT HTML UNTUK SETIAP PAIR ---
-        const el = document.createElement('div');
-        el.className = 'pair';
-        el.id = 'pair-' + sym;
-        
-        // Membuat elemen Sym dan Price secara terpisah untuk akses mudah
-        const symEl = document.createElement('div');
-        symEl.className = 'sym';
-        symEl.textContent = sym.replace('USDT', '/USDT');
-        
-        const priceEl = document.createElement('div');
-        priceEl.className = 'price muted';
-        priceEl.textContent = '-'; 
-        
-        el.appendChild(symEl);
-        el.appendChild(priceEl);
-        
-        pairsContainer.appendChild(el);
-        
-        // --- 2. DEFINISI LISTENER DENGAN REFERENSI LANGSUNG KE priceEl ---
-        listeners[sym] = (d) => {
-            // Menggunakan 'c' (Last Price) dan 'P' (Percentage Price Change)
-            const price = parseFloat(d.c).toFixed(2);
-            const priceChangePercent = parseFloat(d.P);
-            
-            // Mengupdate konten dan gaya menggunakan referensi priceEl
-            priceEl.textContent = '$' + Number(price).toLocaleString();
-            
-            // Logika UP/DOWN
-            if (priceChangePercent >= 0) {
-                priceEl.className = 'price up';
-            } else {
-                priceEl.className = 'price down';
-            }
-        };
-    });
-    
-    // Memulai koneksi WebSocket dengan listeners yang sudah dibuat
-    ProStream.startPairsWS(pairs, listeners);
-}
-
-
-
-window.addEventListener('load', () => {
-    initPairs(); // Memulai stream harga Binance
-    initChart(); // Mempersiapkan chart
-    // Catatan: Stream Poin Somnia dimulai saat tombol Connect diklik!
-});
+// Memanggil fungsi secara langsung untuk memastikan Live Pairs dan Chart segera dimuat, 
+// mengatasi masalah timing pada browser seluler.
+initPairs(); 
+initChart();
