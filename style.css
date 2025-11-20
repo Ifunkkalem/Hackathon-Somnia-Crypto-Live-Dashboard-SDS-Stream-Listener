@@ -303,4 +303,38 @@ h3 {
 .footer p {
     margin: 5px 0;
 }
+/* --- GAYA UNTUK LOGO DS.PNG --- */
+
+.header-left {
+    display: flex;
+    align-items: center; /* Untuk menyejajarkan logo dan teks judul secara vertikal */
+    gap: 15px; /* Memberi jarak antara logo dan judul */
+}
+
+.logo {
+    height: 50px; /* Ukuran yang pas untuk logo di header */
+    width: auto;
+    /* Memberikan efek neon glow pada logo itu sendiri */
+    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); 
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05); /* Efek visual saat kursor di atas logo */
+}
+
+/* Jika sebelumnya Anda menambahkan footer, gaya ini akan membuatnya rapi */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    border-top: 1px dashed var(--color-neon-secondary);
+    color: var(--color-text-muted);
+    font-size: 0.85em;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
 
