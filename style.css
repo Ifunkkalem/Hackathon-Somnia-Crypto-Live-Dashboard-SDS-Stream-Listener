@@ -336,5 +336,23 @@ h3 {
 .footer p {
     margin: 5px 0;
 }
+/* --- GAYA UNTUK IFRAME MINIGAME --- */
+
+.game-frame {
+    /* Gaya untuk kartu container minigame */
+    grid-column: 1 / -1; /* Asumsi: Biarkan minigame mengambil seluruh lebar di baris bawah */
+    /* Jika ingin di samping, gunakan grid-column: 2 / 3; atau sesuaikan */
+    min-height: 450px; 
+    padding: 10px;
+}
+
+#pacman-game {
+    width: 100%;
+    height: 420px; /* Cukup tinggi untuk menampilkan game */
+    border: 2px solid var(--color-neon-primary); /* Border neon di sekitar game */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+    /* Penting: background-color disetel di pacman.css */
+}
 
 
