@@ -1,0 +1,171 @@
+/* pacman.css - FINAL VERSION */
+
+/* --- Reset dan Box Sizing Global --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* --- Styling Dasar Neon --- */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #0b0f19; /* Latar gelap yang sama dengan dashboard */
+  color: #59ffc9; /* Warna teks neon */
+  font-family: 'Rajdhani', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* --- Wrapper Game --- */
+.game-wrapper {
+  background-color: #1a1f2e;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* --- Peta Game (GRID) --- */
+#grid-container {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(20, 20px); /* default desktop */
+  border: 3px solid #59ffc9;
+  margin: 15px auto;
+  background-color: #000;
+}
+
+/* --- Kotak Grid --- */
+.square {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- Elemen Game --- */
+.wall {
+  background-color: #0000ff;
+  border: 1px solid #3333ff;
+  box-shadow: inset 0 0 5px rgba(0, 0, 255, 0.7);
+}
+
+.dot {
+  background-color: #fffe00;
+  border-radius: 50%;
+  margin: 6px;
+  height: 8px;
+  width: 8px;
+  box-shadow: 0 0 5px #fffe00;
+}
+
+.pac-man {
+  background-color: #00ff66; /* Hijau neon */
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ff66;
+  height: 100%;
+  width: 100%;
+}
+
+.ghost {
+  background-color: #ff0033; /* Merah terang */
+  border-radius: 50%;
+  box-shadow: 0 0 8px #ff0033;
+  height: 100%;
+  width: 100%;
+}
+
+/* --- Tombol Mulai --- */
+#start-button {
+  background-color: #59ffc9;
+  color: #0b0f19;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+  transition: background-color 0.3s;
+}
+
+#start-button:hover {
+  background-color: #33e6b2;
+}
+
+/* --- Status Game --- */
+#status-message {
+  margin-top: 5px;
+  color: #ff5983;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+/* --- Kontrol Sentuh Mobile --- */
+.controls-mobile {
+  margin-top: 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row-control {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.controls-mobile button {
+  background-color: #ff5983;
+  color: #0b0f19;
+  border: none;
+  padding: 15px;
+  font-size: 1.2em;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 89, 131, 0.7);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- Responsif Mobile --- */
+@media (max-width: 600px) {
+  .controls-mobile {
+    display: flex;
+  }
+
+  #grid-container {
+    max-width: 300px;
+    grid-template-columns: repeat(20, 15px);
+  }
+
+  .square {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* 🔧 Perbaikan visual dinding vertikal */
+  .wall {
+    border: 0.5px solid #3333ff;
+    box-shadow: inset 0 0 2px rgba(0, 0, 255, 0.5);
+  }
+
+  /* 🍬 Ukuran dot lebih kecil dan proporsional */
+  .dot {
+    width: 5px;
+    height: 5px;
+    margin: 4px;
+    box-shadow: 0 0 3px #fffe00;
+  }
+}
