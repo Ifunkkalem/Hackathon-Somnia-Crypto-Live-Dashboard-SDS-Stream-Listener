@@ -1,27 +1,35 @@
 /* ================================================= */
-/* DreamStream PRO+ DASHBOARD - NEON TERMINAL STYLE  */
+/* DreamStream PRO+ DASHBOARD - FUTURISTIC SHUTTERSTOCK STYLE  */
 /* ================================================= */
 
 /* --- VARIABEL WARNA NEON --- */
 :root {
-    --color-bg-dark: #070211; /* Latar Belakang Sangat Gelap */
-    --color-bg-card: #10052b; /* Background Card */
-    --color-neon-primary: #00FFFF; /* Cyan Terang untuk Aksen */
-    --color-neon-secondary: #008080; /* Cyan Lebih Redup */
-    --color-text-main: #E0FFFF; /* Teks Utama Putih Kebiruan */
-    --color-text-muted: #80A0A0; /* Teks Muted */
+    --color-bg-dark: #000000; /* Hitam Penuh */
+    --color-bg-card: #0d011c; /* Ungu gelap yang kaya */
+    --color-neon-primary: #59ffc9; /* Electric Teal/Mint untuk Aksen */
+    --color-neon-secondary: #003322; /* Teal gelap untuk border */
+    --color-text-main: #E0FFFF; 
+    --color-text-muted: #80A0A0;
+    --color-error: #ff4d4d;
 }
 
 /* --- FONT DAN BODY --- */
 body {
-    font-family: 'Space Mono', monospace; /* Gunakan font Monospace untuk kesan terminal */
-    background-color: var(--color-bg-dark);
+    font-family: 'Rajdhani', sans-serif; /* Font bersih dan modern untuk body */
+    background: radial-gradient(circle at center, #100018 0%, #000000 100%); /* Gradient halus */
     color: var(--color-text-main);
     margin: 0;
     padding: 20px;
-    line-height: 1.6;
+    line-height: 1.5;
     min-height: 100vh;
     box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* --- CONTAINER UTAMA --- */
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
 }
 
 /* --- HEADER DAN KONTROL --- */
@@ -31,48 +39,61 @@ header {
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--color-neon-secondary);
+    border-bottom: 1px solid var(--color-neon-secondary);
 }
 
 h1 {
-    font-size: 2.2em;
+    font-family: 'Orbitron', sans-serif; /* Font Teknis untuk Judul Utama */
+    font-size: 2.5em;
     color: var(--color-neon-primary);
-    text-shadow: 0 0 8px var(--color-neon-secondary);
+    text-shadow: 0 0 15px rgba(89, 255, 201, 0.7); /* Glow yang lebih intens */
+    letter-spacing: 2px;
 }
 
 .controls {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 #wallet-input {
     background: var(--color-bg-card);
     border: 1px solid var(--color-neon-secondary);
     color: var(--color-text-main);
-    padding: 8px 12px;
-    border-radius: 4px;
-    width: 250px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    width: 280px;
+    font-size: 0.9em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#wallet-input:focus {
+    outline: none;
+    border-color: var(--color-neon-primary);
+    box-shadow: 0 0 5px var(--color-neon-primary);
 }
 
 /* --- GAYA TOMBOL NEON --- */
 .btn-primary, .btn-secondary {
-    padding: 8px 15px;
+    padding: 10px 18px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s ease;
+    font-weight: 600;
+    font-family: 'Rajdhani', sans-serif;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
     background-color: var(--color-neon-primary);
     color: var(--color-bg-dark);
-    box-shadow: 0 0 10px var(--color-neon-primary);
+    box-shadow: 0 0 15px rgba(89, 255, 201, 0.7);
 }
 
 .btn-primary:hover {
-    background-color: var(--color-text-main);
-    box-shadow: 0 0 15px var(--color-neon-primary);
+    filter: brightness(1.2); /* Sedikit lebih terang saat hover */
+    box-shadow: 0 0 25px var(--color-neon-primary);
 }
 
 .btn-secondary {
@@ -84,128 +105,97 @@ h1 {
 .btn-secondary:hover {
     background-color: var(--color-neon-primary);
     color: var(--color-bg-dark);
-    box-shadow: 0 0 10px var(--color-neon-primary);
+    box-shadow: 0 0 15px var(--color-neon-primary);
 }
 
-.btn-clear {
-    background-color: transparent;
-    color: #ff4d4d;
-    border: 1px solid #ff4d4d;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-clear:hover {
-    background-color: #ff4d4d;
-    color: var(--color-bg-dark);
-}
 
 /* --- LAYOUT DASHBOARD (GRID) --- */
 .dashboard {
     display: grid;
-    grid-template-columns: 2fr 1fr; /* Chart 2/3, Side Panel 1/3 */
-    gap: 20px;
-    margin-bottom: 20px;
+    grid-template-columns: 3fr 1fr; /* Chart 75%, Side Panel 25% */
+    gap: 25px;
+    margin-bottom: 25px;
 }
 
 /* --- GAYA CARD/PANEL UMUM --- */
-.chart-panel, .side-panel .card {
-    background-color: var(--color-bg-card);
-    padding: 20px;
-    border-radius: 8px;
+.chart-panel, .side-panel .card, .activity-panel {
+    background: var(--color-bg-card);
+    padding: 25px;
+    border-radius: 12px;
     border: 1px solid var(--color-neon-secondary);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1); /* Glow lembut */
+    box-shadow: inset 0 0 8px rgba(89, 255, 201, 0.1), 0 0 10px rgba(0, 0, 0, 0.5); /* Inner & Outer Shadow */
 }
 
 h3 {
+    font-family: 'Orbitron', sans-serif;
     color: var(--color-neon-primary);
     border-bottom: 1px dashed var(--color-neon-secondary);
-    padding-bottom: 5px;
+    padding-bottom: 8px;
     margin-top: 0;
-    font-size: 1.1em;
+    font-size: 1.2em;
+    letter-spacing: 1px;
 }
 
-/* --- STATS PANEL (POIN & STATUS) --- */
+/* --- STATS PANEL --- */
 .stats-panel {
-    grid-column: 1 / -1; /* Rentang dari awal hingga akhir grid */
+    grid-column: 1 / -1; 
     display: flex;
     justify-content: space-around;
-    gap: 20px;
+    gap: 25px;
 }
 
 .stat-card {
     flex: 1;
-    background-color: var(--color-bg-card);
-    padding: 15px;
-    border-radius: 8px;
+    background: linear-gradient(145deg, #100018, #05000a); /* Gradasi pada card */
+    padding: 20px;
+    border-radius: 10px;
     text-align: center;
-    border: 1px solid var(--color-neon-secondary);
+    border: 1px solid #1a0033;
+    transition: transform 0.3s;
 }
 
-.stat-card h3 {
-    font-size: 0.9em;
-    border-bottom: none;
-    margin-bottom: 5px;
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(89, 255, 201, 0.3);
 }
 
 /* GAYA NILAI UTAMA POIN (Fokus Neon Glow) */
 .value {
-    font-size: 2.5em;
-    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5em;
+    font-weight: 700;
     color: var(--color-neon-primary);
-    text-shadow: 0 0 10px var(--color-neon-primary);
+    text-shadow: 0 0 20px var(--color-neon-primary), 0 0 30px rgba(89, 255, 201, 0.5);
     margin: 5px 0;
     transition: color 0.3s;
 }
 
 .value.off {
-    color: #ff4d4d; /* Merah untuk Disconnected */
-    text-shadow: 0 0 8px #ff4d4d80;
+    color: var(--color-error); 
+    text-shadow: 0 0 10px var(--color-error);
 }
 
 /* --- LIVE PAIRS --- */
-.pair-list {
-    margin-top: 10px;
-}
-
 .pair {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
+    padding: 8px 0;
     border-bottom: 1px dotted var(--color-neon-secondary);
-}
-
-.pair:last-child {
-    border-bottom: none;
-}
-
-.pair .sym {
-    font-weight: bold;
-    color: var(--color-text-main);
-}
-
-.pair .price {
-    font-weight: bold;
-    transition: color 0.2s;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
 }
 
 .pair .price.up {
-    color: #51ff8a; /* Hijau */
+    color: #51ff8a; 
+    text-shadow: 0 0 3px #51ff8a;
 }
 
 .pair .price.down {
-    color: #ff4d4d; /* Merah */
+    color: var(--color-error); 
+    text-shadow: 0 0 3px var(--color-error);
 }
 
 /* --- ACTIVE MISSIONS --- */
-#missions {
-    list-style: none;
-    padding: 0;
-    margin-top: 10px;
-}
-
 #missions li {
     padding: 5px 0;
     color: var(--color-text-main);
@@ -215,30 +205,26 @@ h3 {
 
 /* --- RECENT ACTIVITY --- */
 .activity-panel {
-    grid-column: 1 / -1; /* Membentang penuh di bawah */
-    background-color: var(--color-bg-card);
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid var(--color-neon-secondary);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+    grid-column: 1 / -1; 
 }
 
 #activity {
-    height: 200px;
+    height: 250px;
     overflow-y: scroll;
-    padding-right: 15px; /* Ruang untuk scrollbar */
+    padding-right: 15px; 
     font-size: 0.9em;
     color: var(--color-text-muted);
 }
 
 #activity div {
-    padding: 3px 0;
+    padding: 4px 0;
     border-bottom: 1px dotted #ffffff1a;
+    font-family: 'Space Mono', monospace; /* Font Terminal untuk log */
 }
 
 /* --- TOAST NOTIFICATION --- */
 .toast {
-    display: none;
+    /* (Gaya toast dipertahankan dari yang sebelumnya, memastikan kontras) */
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -246,46 +232,33 @@ h3 {
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
     z-index: 1000;
     opacity: 0.9;
-}
-
-.toast.info {
-    background-color: var(--color-bg-card);
-    color: var(--color-neon-primary);
-    border: 1px solid var(--color-neon-primary);
-}
-
-.toast.success {
-    background-color: #003c00;
-    color: #51ff8a;
-    border: 1px solid #51ff8a;
-}
-
-.toast.error {
-    background-color: #3c0000;
-    color: #ff4d4d;
-    border: 1px solid #ff4d4d;
+    display: none;
 }
 
 /* --- RESPONSIVE (Penting untuk HP) --- */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .dashboard {
-        grid-template-columns: 1fr; /* Semua kolom menjadi satu baris di layar kecil */
+        grid-template-columns: 1fr;
     }
 
     .stats-panel {
         flex-direction: column;
+        gap: 15px;
     }
 
     header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+    }
+    
+    h1 {
+        margin-bottom: 15px;
     }
 
     .controls {
-        margin-top: 15px;
         flex-direction: column;
         width: 100%;
     }
@@ -294,85 +267,8 @@ h3 {
         width: 100%;
         box-sizing: border-box;
     }
-}
-  box-shadow: 0 8px 24px rgba(123,59,255,0.12);
-}
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 18px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 18px auto;
-}
-.card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border: 1px solid rgba(123,59,255,0.04);
-  padding: 14px;
-  border-radius: 10px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-}
-.stat {
-  flex: 1;
-  text-align: center;
-}
-.label {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-.value {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--accent-2);
-}
-.chart-card {
-  padding: 12px;
-}
-.activity-card .log {
-  max-height: 220px;
-  overflow: auto;
-  padding: 8px;
-  background: rgba(0,0,0,0.12);
-  border-radius: 8px;
-  color: var(--muted);
-}
-.pairs-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.pair {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #030016, #0b0022);
-  border: 1px solid rgba(255,255,255,0.02);
-}
-.pair .price.up { color: #7bff9a; }
-.pair .price.down { color: #ff6b8b; }
-.footer {
-  text-align: center;
-  padding: 16px;
-  color: var(--muted);
-  font-size: 13px;
-}
-.toast {
-  position: fixed;
-  right: 16px;
-  bottom: 18px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #030006;
-  padding: 10px 14px;
-  border-radius: 8px;
-  box-shadow: 0 12px 30px rgba(123,59,255,0.14);
-  display: none;
-  z-index: 9999;
-}
 
-@media(max-width:980px) {
-  .grid { grid-template-columns: 1fr; padding: 12px; }
-  .nav-right input { min-width: 120px; }
+    .btn-primary, .btn-secondary {
+        width: 100%;
+    }
 }
