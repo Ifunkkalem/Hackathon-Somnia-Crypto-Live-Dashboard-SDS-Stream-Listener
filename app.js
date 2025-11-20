@@ -117,7 +117,7 @@ window.onStreamLog = function(txt) {
 // --- ADAPTER CONTROLLER (PROSTREAM) ---
 
 const ProStream = {
-    DEFAULT_PAIRS: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT'],
+    DEFAULT_PAIRS: ['SOMUSDT', 'SOMBNB', 'SOMETH'],
     
     trackWallet: function(wallet) {
         if (currentStreamAdapter) {
