@@ -1,76 +1,77 @@
-/* ================================================= */
-/* DreamStream PRO+ DASHBOARD - FUTURISTIC SHUTTERSTOCK STYLE  */
-/* ================================================= */
+/* Ganti/Tambahkan Kode untuk Layout Grid dan Game Frame di bagian Main Content */
 
-/* --- VARIABEL WARNA NEON --- */
-:root {
-    --color-bg-dark: #000000; /* Hitam Penuh */
-    --color-bg-card: #0d011c; /* Ungu gelap yang kaya */
-    --color-neon-primary: #59ffc9; /* Electric Teal/Mint untuk Aksen */
-    --color-neon-secondary: #003322; /* Teal gelap untuk border */
-    --color-text-main: #E0FFFF; 
-    --color-text-muted: #80A0A0;
-    --color-error: #ff4d4d;
-}
-
-/* --- FONT DAN BODY --- */
-body {
-    font-family: 'Rajdhani', sans-serif; /* Font bersih dan modern untuk body */
-    background: radial-gradient(circle at center, #100018 0%, #000000 100%); /* Gradient halus */
-    color: var(--color-text-main);
-    margin: 0;
+.main-content {
+    display: grid;
+    /* Membuat layout 3 kolom, tetapi kolom game-frame akan mengambil seluruh lebar di baris bawah */
+    grid-template-columns: 2fr 1fr; 
+    grid-gap: 20px;
     padding: 20px;
-    line-height: 1.5;
-    min-height: 100vh;
-    box-sizing: border-box;
-    overflow-x: hidden;
-}
-
-/* --- CONTAINER UTAMA --- */
-.container {
-    max-width: 1500px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-/* --- HEADER DAN KONTROL --- */
-header {
+.column.left {
+    grid-column: 1 / 2;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--color-neon-secondary);
+    flex-direction: column;
+    gap: 20px;
 }
 
-h1 {
-    font-family: 'Orbitron', sans-serif; /* Font Teknis untuk Judul Utama */
-    font-size: 2.5em;
-    color: var(--color-neon-primary);
-    text-shadow: 0 0 15px rgba(89, 255, 201, 0.7); /* Glow yang lebih intens */
-    letter-spacing: 2px;
-}
-
-.controls {
+.column.right {
+    grid-column: 2 / 3;
     display: flex;
-    gap: 10px;
-    align-items: center;
+    flex-direction: column;
+    gap: 20px;
 }
 
-#wallet-input {
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-neon-secondary);
-    color: var(--color-text-main);
-    padding: 10px 15px;
-    border-radius: 6px;
-    width: 280px;
-    font-size: 0.9em;
-    transition: border-color 0.3s, box-shadow 0.3s;
+.game-frame {
+    /* Membuat game frame mengambil seluruh lebar di baris bawah */
+    grid-column: 1 / -1; 
+    min-height: 450px; 
+    padding: 10px;
 }
 
-#wallet-input:focus {
-    outline: none;
-    border-color: var(--color-neon-primary);
-    box-shadow: 0 0 5px var(--color-neon-primary);
+#pacman-game {
+    width: 100%;
+    height: 420px; 
+    border: 2px solid var(--color-neon-primary); 
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+}
+
+/* --- GAYA TAMBAHAN LAINNYA --- */
+
+/* LOGO dan FOOTER */
+
+.header-left {
+    display: flex;
+    align-items: center; 
+    gap: 15px; 
+}
+
+.logo {
+    height: 50px; 
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(89, 255, 201, 0.5)); 
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    border-top: 1px dashed var(--color-neon-secondary);
+    color: var(--color-text-muted);
+    font-size: 0.85em;
+}
+
+.footer p {
+    margin: 5px 0;
+}
 }
 
 /* --- GAYA TOMBOL NEON --- */
