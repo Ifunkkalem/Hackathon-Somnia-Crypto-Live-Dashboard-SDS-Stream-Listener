@@ -1,0 +1,94 @@
+/* Styling Dasar Neon */
+body {
+    background-color: #0b0f19; /* Latar gelap */
+    color: #59ffc9; /* Warna teks neon */
+    font-family: 'Rajdhani', sans-serif; /* Gunakan font yang sama dengan dashboard */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h2 {
+    color: #ff5983; /* Judul merah muda neon */
+    text-shadow: 0 0 10px rgba(255, 89, 131, 0.7);
+}
+
+.game-wrapper {
+    background-color: #1a1f2e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(89, 255, 201, 0.5); /* Border glow */
+    text-align: center;
+}
+
+/* Styling Peta Game (GRID) */
+#grid-container {
+    width: 400px; /* Lebar total (20 kotak x 20px) */
+    height: 400px; /* Tinggi total */
+    display: grid;
+    border: 3px solid #59ffc9;
+    margin: 20px auto;
+    background-color: #000;
+}
+
+/* Styling setiap kotak di dalam Grid */
+.square {
+    width: 20px;
+    height: 20px;
+}
+
+/* --- Definisi Elemen Game --- */
+
+.wall {
+    background-color: #0000ff; /* Dinding biru */
+    border: 1px solid #3333ff;
+    box-shadow: inset 0 0 5px rgba(0, 0, 255, 0.7);
+}
+
+.dot {
+    background-color: transparent;
+    border-radius: 50%;
+    margin: 6px;
+    height: 8px;
+    width: 8px;
+    background-color: #fffe00; /* Titik kuning */
+    box-shadow: 0 0 5px #fffe00;
+}
+
+.pac-man {
+    background-color: #ffff00; /* Pac-Man kuning */
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ffff00;
+}
+
+.ghost {
+    background-color: #ff5983; /* Ghost/Error merah muda */
+    border-radius: 50%;
+    box-shadow: 0 0 8px #ff5983;
+}
+
+/* Gaya tombol */
+#start-button {
+    background-color: #59ffc9;
+    color: #0b0f19;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(89, 255, 201, 0.5);
+    transition: background-color 0.3s;
+}
+
+#start-button:hover {
+    background-color: #33e6b2;
+}
+
+#status-message {
+    margin-top: 10px;
+    color: #ff5983;
+    font-weight: bold;
+}
